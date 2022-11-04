@@ -5,11 +5,31 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <style>
+    .red_color {
+      color: red;
+    }
+  </style>
 </head>
 <body>
   <div id="app">
     <input type="text" v-model:value="name">
-    <h1>{{name}}</h1>
+    <h1 v-bind:class="redColor">{{name}}</h1>
+    <a v-bind:href="youtube">Youtube</a> <br>
+    <img :src="myImage" alt=""> <br>
+    <!-- 
+      v-bind မပါဘဲ အတိုကောက်  : တင် ရေးရင်လဲ ရပါတယ်။
+     -->
+
+    <input type="text" v-model:value="email" id="" :disabled="status"> <br>
+    <h1>{{ email }}</h1>
+
+    <!-- 
+      input value ကို v-bind နဲ့ဆို two way မရပါ input ပြောင်းလဲ data ထဲက လိုက်မပြောင်းပါ v-model နဲ့မှာ ရပါမည်
+     -->
+
+
+
   </div>
 </body>
 <!-- development version, includes helpful console warnings -->
@@ -18,7 +38,12 @@
   let app = new Vue({
     el : '#app',
     data : {
-      name : 'Hello'
+      name : 'Hello',
+      redColor: 'red_color',
+      youtube : 'https://www.youtube.com',
+      myImage : 'image/wgo-splash-40.png',
+      email : 'mto@gmail.com',
+      status : false
     }
   })
 </script>
