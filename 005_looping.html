@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <h3>ToDo List</h3>
+    <input type="text" placeholder="Enter Title" v-model="todo.title">
+    <small style="color: red;" v-if="data_validation.title">Title field is required</small>
+    <br>
+    <input type="text" placeholder="Enter Todo" v-model="todo.body_text">
+    <small style="color: red;" v-if="data_validation.body_text">Todo field is required</small>
+    <br>
+    <button @click="create()">Add</button>
+    <hr>
+    <table border="1">
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Todo</th>
+      </tr>
+      <tr v-for="t in todos">
+        <td>{{t.id}}</td>
+        <td>{{ t.title }}</td>
+        <td>{{ t.body_text }}</td>
+      </tr>
+    </table>
+  </div>
+</body>
+<!-- development version, includes helpful console warnings -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script>
+  let app = new Vue({
+    el : '#app',
+    data : {
+      todo : {
+        title : '',
+        body_text : ''
+      },
+      todos : [],
+      data_validation : {
+        title : false,
+        body_text : false
+      }
+    },
+    methods: {
+      create(){
+        this.data_valid();
+
+        if(!this.data_validation.title && !this.data_validation.body_text){
+          this.todos.push({
+          id : this.todos.length,
+          title : this.todo.title,
+          body_text : this.todo.body_text
+        })
+        this.clear();
+        }
+      },
+      clear(){
+        this.todo.title = '';
+        this.todo.body_text = '';
+      },
+      data_valid(){
+        this.data_validation.title = this.todo.title == '' ? true : false;
+        this.data_validation.body_text = this.todo.body_text == '' ? true : false;
+      }
+    },
+  })
+</script>
+</html>
