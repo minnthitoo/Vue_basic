@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div id="app">
+      <div class="container bg-dark">
+        <div class="mt-3 bg-dark text-white p-3 rounded text-end">
+          {{ message }}
+        </div>
+        <div class="row mt-3">
+          <div class="col">
+            <input
+              type="number"
+              name=""
+              class="form-control"
+              id=""
+              placeholder="Enter First Number"
+              v-model="userInputs.firstNumber"
+            /><br />
+            <small style="color: red" v-if="status.firstNumberStatus"
+              >First Number Required</small
+            >
+          </div>
+          <div class="col">
+            <input
+              type="number"
+              name=""
+              class="form-control"
+              id=""
+              placeholder="Enter Second Number"
+              v-model="userInputs.secondNumber"
+            /><br />
+            <small style="color: red" v-if="status.secondNumberStatus"
+              >Second Number Required</small
+            >
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-4">
+            <select
+              name=""
+              id=""
+              class="form-control"
+              v-model="userInputs.operator"
+            >
+              <option value="">Choose an Option</option>
+              <option value="+">+</option>
+              <option value="-">-</option>
+              <option value="x">x</option>
+              <option value="/">/</option>
+            </select>
+            <br />
+            <small style="color: red" v-if="status.operatorStatus"
+              >Operator Required</small
+            >
+          </div>
+          <div class="col-4">
+            <button class="btn btn-success w-100" @click="calculate()">
+              Calculate
+            </button>
+          </div>
+          <div class="col-4">
+            <button class="btn btn-danger w-100" @click="clearAll()">
+              Clear
+            </button>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col">
+            <button class="btn btn-warning w-100" :disabled="!saveStatus" @click="save()">Save</button>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col">
+            <h3 class="text-white">History</h3>
+            <p class="text-white" v-for="h in histories">{{h}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <!-- development version, includes helpful console warnings -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <script>
+    let app = new Vue({
+      el: "#app",
+      data: {
+        userInputs: {
+          firstNumber: "",
+          secondNumber: "",
+          operator: "",
+        },
+        status: {
+          firstNumberStatus: false,
+          secondNumberStatus: false,
+          operatorStatus: false,
+        },
+        histories : [],
+        total: "",
+        message: 0,
+        saveStatus : false
+      },
+      methods: {
+        calculate() {
+          this.validation();
+          if (
+            !this.status.firstNumberStatus &&
+            !this.status.secondNumberStatus &&
+            !this.operator
+          ) {
+            let num1 = parseInt(this.userInputs.firstNumber);
+            let num2 = parseInt(this.userInputs.secondNumber);
+
+            switch (this.userInputs.operator) {
+              case "+":
+                this.total = num1 + num2;
+                break;
+              case "-":
+                this.total = num1 - num2;
+                break;
+              case "x":
+                this.total = num1 * num2;
+                break;
+              case "/":
+                this.total = num1 / num2;
+                break;
+            }
+            this.message = `
+            ${num1} ${this.userInputs.operator} ${num2} = ${this.total}
+          `;
+
+            this.clear();
+            this.saveStatus = true;
+          }
+        },
+        clear() {
+          (this.userInputs.firstNumber = ""),
+            (this.userInputs.secondNumber = ""),
+            (this.userInputs.operator = "");
+        },
+        clearAll() {
+          this.clear();
+          this.message = 0;
+        },
+        save(){
+          this.histories.push(this.message);
+          this.message = 0;
+          this.saveStatus = false
+        },
+        validation() {
+          (this.status.firstNumberStatus =
+            this.userInputs.firstNumber == "" ? true : false),
+            (this.status.secondNumberStatus =
+              this.userInputs.secondNumber == "" ? true : false),
+            (this.status.operatorStatus =
+              this.userInputs.operator == "" ? true : false);
+        },
+      },
+    });
+  </script>
+</html>
